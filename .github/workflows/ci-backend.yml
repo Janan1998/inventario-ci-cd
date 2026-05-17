@@ -2,29 +2,28 @@ name: CI Backend
 
 on:
   push:
-    branches: [ "main" ]
+    paths:
+      - 'backend/**'
   pull_request:
-    branches: [ "main" ]
+    paths:
+      - 'backend/**'
 
 jobs:
-  test-backend:
+  test:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Descargar código del repositorio
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Instalar Node LTS
+      - name: Instalar Node
         uses: actions/setup-node@v4
         with:
-          node-version: "lts/*"
+          node-version: 18
 
-      - name: Instalar dependencias del backend
-        run: |
-          cd backend
-          npm install
+      - name: Instalar dependencias
+        working-directory: backend
+        run: npm install
 
-      - name: Ejecutar pruebas del backend
-        run: |
-          cd backend
-          npm test
+      - name: Ejecutar tests
+        working-directory: backend
+        run: npm test
